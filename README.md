@@ -1,3 +1,17 @@
+# Post-fork notes
+Project forked to make modifications, specifically an importable module version.
+An authenticator app was created in Microsoft Azure to serve this library: [OneDrive_authenticator app](https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps/ApplicationMenuBlade/~/Overview/appId/03056d9b-677c-4f3b-a2c5-ca602d558087/objectId/ea39f563-d813-4585-b258-4b571a76918b/isMSAApp~/false/defaultBlade/Overview/appSignInAudience/AzureADandPersonalMicrosoftAccount/servicePrincipalCreated~/true).
+
+This is based on the Graph REST API provided by Microsoft, documentation for which can be found [here]{https://learn.microsoft.com/en-us/onedrive/developer/rest-api/?view=odsp-graph-online}.
+
+List of files added to the repo:
+- constants.py
+- onedrive_api.py
+- requirements.txt
+List of modified files:
+- README.md
+
+
 # Access OneDrive via Graph API (Python code)
 Upload, download, rename your files and many more to your OneDrive both personal
 and business accounts using Microsoft Graph API (Python code).
@@ -8,7 +22,7 @@ Azure portal.
 ```python
 # Program: Accessing OneDrive via Graph API
 # Author: Pranab Das (GitHub: @pranabdas)
-# Version: 20210820
+# Version: 20210820@
 ```
 
 ```python
