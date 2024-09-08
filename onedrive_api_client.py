@@ -19,26 +19,26 @@ from onedrive_api.utils import (
 logger = logging.getLogger()
 
 
-class OneDriveAPI:
+class OneDriveAPIClient:
     def __init__(self):
-        self.PERMISSIONS = c.PERMISSIONS
-        self.SCOPE = ''
-        for items in range(len(self.PERMISSIONS)):
-            self.SCOPE = self.SCOPE + self.PERMISSIONS[items]
-            if items < len(self.PERMISSIONS)-1:
-                self.SCOPE = self.SCOPE + '+'
-        self.URL = c.API_ROOT_URL
-        self.AUTH_URL = c.AUTH_URL
-        self.AUTH_RESPONSE_TYPE = c.AUTH_RESPONSE_TYPE
-        self.CLIENT_ID = c.CLIENT_ID
-        self.REDIRECT_URI_QUOTED = urllib.parse.quote(c.REDIRECT_URI)
+        self.permissions = c.PERMISSIONS
+        self.scope = ''
+        for items in range(len(self.permissions)):
+            self.scope = self.scope + self.permissions[items]
+            if items < len(self.permissions)-1:
+                self.scope = self.scope + '+'
+        self.url = c.API_ROOT_URL
+        self.auth_url = c.AUTH_URL
+        self.auth_response_type = c.AUTH_RESPONSE_TYPE
+        self.client_id = c.CLIENT_ID
+        self.redirect_uri_quoted = urllib.parse.quote(c.REDIRECT_URI)
 
 
     def authenticate(self):
-        print('Click over this link ' + self.AUTH_URL + '?client_id=' + \
-            self.CLIENT_ID + '&scope=' + self.SCOPE + '&response_type=' + \
-            self.AUTH_RESPONSE_TYPE + '&redirect_uri=' + \
-            self.REDIRECT_URI_QUOTED)
+        print('Click over this link ' + self.auth_url + '?client_id=' + \
+            self.client_id + '&scope=' + self.scope + '&response_type=' + \
+            self.auth_response_type + '&redirect_uri=' + \
+            self.redirect_uri_quoted)
         print('Sign in to your account, copy the whole redirected URL.')
         print('Note: "This site can\'t be reached." is not a problem.')
         
@@ -49,7 +49,7 @@ class OneDriveAPI:
             (code.find('&token_type'))
         ]
         
-        self.HEADERS = {'Authorization': 'Bearer ' + self.token}
+        self.headers = {'Authorization': 'Bearer ' + self.token}
         
         response = self._response_get('me/drive/')
 
@@ -58,7 +58,7 @@ class OneDriveAPI:
 
     def _response_get(self, endpoint: str) -> dict:
         response = json.loads(requests.get(f"{self.URL}{endpoint}",
-                                          headers = self.HEADERS).text)
+                                          headers = self.headers).text)
         handle_response_code(response)
 
         return response
@@ -99,8 +99,8 @@ class OneDriveAPI:
     def delete_file(self, item_id: str) -> None:
         confirmation = input('Are you sure to delete the item? (Y/n):')
         if (confirmation.lower()=='y'):
-            response = requests.delete(f"{self.URL}/me/drive/items/{item_id}",
-                                          headers=self.HEADERS)
+            response = requests.delete(f"{self.url}/me/drive/items/{item_id}",
+                                          headers=self.headers)
             if (response.status_code == 204):
                 print('Item gone! If need to recover, please check OneDrive Recycle Bin.')
         else:
@@ -111,8 +111,8 @@ class OneDriveAPI:
                       item_id: str,
                       output_path: str) -> None:
         response = requests.get(
-            f"{self.URL}/me/drive/items/{item_id}/content",
-            headers=self.HEADERS
+            f"{self.url}/me/drive/items/{item_id}/content",
+            headers=self.headers
         )
         try:
             with open (output_path, "wb") as f:
@@ -120,4 +120,3 @@ class OneDriveAPI:
             print("File succesfully downloaded")
         except Exception as e:
             print(f"File download failed, {e}")
-    
