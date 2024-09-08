@@ -57,7 +57,7 @@ class OneDriveAPIClient:
     
 
     def _response_get(self, endpoint: str) -> dict:
-        response = json.loads(requests.get(f"{self.URL}{endpoint}",
+        response = json.loads(requests.get(f"{self.url}{endpoint}",
                                           headers = self.headers).text)
         handle_response_code(response)
 
