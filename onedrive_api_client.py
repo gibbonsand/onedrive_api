@@ -16,9 +16,6 @@ from onedrive_api.utils import (
 )
 
 
-logger = logging.getLogger()
-
-
 class OneDriveAPIClient:
     def __init__(self):
         self.permissions = c.PERMISSIONS
@@ -35,12 +32,12 @@ class OneDriveAPIClient:
 
 
     def authenticate(self):
-        print('Click over this link ' + self.auth_url + '?client_id=' + \
+        logging.info('Click this link ' + self.auth_url + '?client_id=' + \
             self.client_id + '&scope=' + self.scope + '&response_type=' + \
             self.auth_response_type + '&redirect_uri=' + \
             self.redirect_uri_quoted)
-        print('Sign in to your account, copy the whole redirected URL.')
-        print('Note: "This site can\'t be reached." is not a problem.')
+        logging.info('Sign in to your account, copy the whole redirected URL.')
+        logging.info('Note: "This site can\'t be reached." is not a problem.')
         
         code = get_long_user_response('Paste the URL here: ')
         
@@ -87,11 +84,11 @@ class OneDriveAPIClient:
         for entries in range(len(items)):
             if(items[entries]['name'] == filename):
                 item_id = items[entries]['id']
-                print('Item-id of', filename, ':', item_id)
+                logging.info(f"Item-id of {filename}: {item_id}")
                 break
         
         if(item_id==''):
-            print(filename, 'not found in the directory.')
+            logging.error(filename, 'not found in the directory.')
         
         return item_id
 
@@ -102,9 +99,9 @@ class OneDriveAPIClient:
             response = requests.delete(f"{self.url}/me/drive/items/{item_id}",
                                           headers=self.headers)
             if (response.status_code == 204):
-                print('Item gone! If need to recover, please check OneDrive Recycle Bin.')
+                logging.info('Item gone! If need to recover, please check OneDrive Recycle Bin.')
         else:
-            print("Item not deleted.")
+            logging.warning("Item not deleted.")
 
 
     def download_file(self,
@@ -117,6 +114,6 @@ class OneDriveAPIClient:
         try:
             with open (output_path, "wb") as f:
                 f.write(response.content)
-            print("File succesfully downloaded")
+            logging.info("File succesfully downloaded")
         except Exception as e:
-            print(f"File download failed, {e}")
+            logging.error(f"File download failed, {e}")
